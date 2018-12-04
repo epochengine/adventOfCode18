@@ -10,5 +10,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("%d\n", day1.CalculateFrequency(string(frequencyInput)))
+	inputStr := string(frequencyInput)
+	fmt.Printf("Day 1 part 1: %d\n", day1.CalculateFrequency(inputStr, "\n"))
+	fmt.Printf("Day 1 part 2: %d\n", day1.FindFirstRepeatFrequency(inputStr, "\n"))
 }

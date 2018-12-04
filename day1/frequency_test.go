@@ -43,3 +43,43 @@ func TestParseInput(t *testing.T) {
 		}
 	}
 }
+
+func TestCalculateFrequency(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected int
+	}{
+		{"+1, -2, +3, +1", 3},
+		{"1, 1, 1", 3},
+		{"1, 1, -2", 0},
+		{"-1, -2, -3", -6},
+	}
+
+	for _, c := range cases {
+		outputFrequency := CalculateFrequency(c.input, ",")
+		if outputFrequency != c.expected {
+			t.Errorf("CalculateFrequency returned incorrect result. Got %d but expected %d", outputFrequency, c.expected)
+		}
+	}
+}
+
+func TestFindFirstRepeatFrequency(t *testing.T) {
+	cases := []struct {
+		input    string
+		expected int
+	}{
+		{"+1, -2, +3, +1", 2},
+		{"1, -1", 0},
+		{"7, -6", 7},
+		{"3, 3, 4, -2, -4", 10},
+		{"-6, 3, 8, 5, -6", 5},
+		{"7, 7, -2, -7, -4", 14},
+	}
+
+	for _, c := range cases {
+		firstRepeat := FindFirstRepeatFrequency(c.input, ",")
+		if firstRepeat != c.expected {
+			t.Errorf("FindFirstRepeatFrequency returned incorrect result. Got %d but expected %d", firstRepeat, c.expected)
+		}
+	}
+}
