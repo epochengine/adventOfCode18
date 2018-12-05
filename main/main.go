@@ -2,13 +2,14 @@ package main
 
 import (
 	"epochengine/adventofcode/day1"
+	"epochengine/adventofcode/day2"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	calculateDay1()
+	calculateDay2()
 }
 
 func calculateDay1() {
@@ -20,6 +21,16 @@ func calculateDay1() {
 
 	fmt.Printf("Day 1 part 1: %d\n", day1.CalculateFrequency(input))
 	fmt.Printf("Day 1 part 2: %d\n", day1.FindFirstRepeatFrequency(input))
+}
+
+func calculateDay2() {
+	rawInput, err := Asset("resources/suit_ids_input.txt")
+	if err != nil {
+		panic(err)
+	}
+	input := ParseStrings(string(rawInput))
+
+	fmt.Printf("Day 2 part 1: %d\n", day2.CalculateChecksum(input))
 }
 
 // ParseStrings takes a newline separated single string and creates a slice
