@@ -72,3 +72,67 @@ func TestCalculateChecksum(t *testing.T) {
 		}
 	}
 }
+
+func TestCalculateHammingDifference(t *testing.T) {
+	cases := []struct {
+		first    string
+		second   string
+		expected []int
+	}{
+		{"abcd", "abcd", []int{}},
+		{"abcd", "abdc", []int{2, 3}},
+		{"abcd", "abce", []int{3}},
+		{"abcd", "bbce", []int{0, 3}},
+	}
+
+	for _, c := range cases {
+		output := CalculateHammingDifference(c.first, c.second)
+		if len(output) != len(c.expected) {
+			t.Errorf("Output has length %d but expected length of %d", len(output), len(c.expected))
+		}
+
+		for i, x := range c.expected {
+			if output[i] != x {
+				t.Errorf("CalculateHammingDifference for %s and %s expected %d at location %d but got %d", c.first, c.second, x, i, output[i])
+			}
+		}
+	}
+}
+
+func TestRemoveCharacterAtIndex(t *testing.T) {
+	cases := []struct {
+		input    string
+		index    int
+		expected string
+	}{
+		{"abcd", 0, "bcd"},
+		{"abcd", 1, "acd"},
+		{"abcd", 3, "abc"},
+		{"abcd", 3, "abc"},
+		{"abcdefgh", 4, "abcdfgh"},
+	}
+
+	for _, c := range cases {
+		output := RemoveCharacterAtIndex(c.input, c.index)
+		if output != c.expected {
+			t.Errorf("RemoveCharacterAtIndex for string %s and index %d returned %s but expected %s", c.input, c.index, output, c.expected)
+		}
+	}
+}
+
+func TestFindCommonCharactersOfSimilarIds(t *testing.T) {
+	cases := []struct {
+		input []string
+		expected string
+	} {
+		{[]string{"abcd", "abce", "aacc"}, "abc"},
+		{[]string{"abcde", "fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz"}, "fgij"},
+	}
+
+	for _, c := range cases {
+		output := FindCommonCharactersOfSimilarIds(c.input)
+		if output != c.expected {
+			t.Errorf("FindCommonCharactersOfSimilarIds for %v returned %s but expected %s", c.input, output, c.expected)
+		}
+	}
+}

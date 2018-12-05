@@ -31,6 +31,7 @@ func calculateDay2() {
 	input := ParseStrings(string(rawInput))
 
 	fmt.Printf("Day 2 part 1: %d\n", day2.CalculateChecksum(input))
+	fmt.Printf("Day 2 part 2: %s\n", day2.FindCommonCharactersOfSimilarIds(input))
 }
 
 // ParseStrings takes a newline separated single string and creates a slice
