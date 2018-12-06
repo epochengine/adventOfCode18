@@ -3,13 +3,14 @@ package main
 import (
 	"epochengine/adventofcode/day1"
 	"epochengine/adventofcode/day2"
+	"epochengine/adventofcode/day3"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	calculateDay2()
+	calculateDay3()
 }
 
 func calculateDay1() {
@@ -32,6 +33,16 @@ func calculateDay2() {
 
 	fmt.Printf("Day 2 part 1: %d\n", day2.CalculateChecksum(input))
 	fmt.Printf("Day 2 part 2: %s\n", day2.FindCommonCharactersOfSimilarIds(input))
+}
+
+func calculateDay3() {
+	rawInput, err := Asset("resources/fabric_input.txt")
+	if err != nil {
+		panic(err)
+	}
+	input := ParseStrings(string(rawInput))
+
+	fmt.Printf("Day 3 part 1: %d\n", day3.FindOverlappingSquares(input))
 }
 
 // ParseStrings takes a newline separated single string and creates a slice
