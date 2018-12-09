@@ -1,6 +1,9 @@
 package day3
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestParseClaim(t *testing.T) {
 	cases := []struct {
@@ -56,24 +59,37 @@ func TestCalculateSquares(t *testing.T) {
 
 	for _, c := range cases {
 		squares := c.claim.calculateSquares()
-		if len(squares) != len(c.expected) {
-			t.Errorf("CalculateSquares had length of %d but expected %d", len(squares), len(c.expected))
+		if !reflect.DeepEqual(squares, c.expected) {
+			t.Errorf("CalculateSquares did not return the correct result for claim %v. Got %v but expected %v", c.claim, squares, c.expected)
 		}
+	}
+}
 
-		for _, square := range c.expected {
-			// Ordering doesn't matter
-			found := false
-			for _, calculatedSquare := range squares {
-				if calculatedSquare.x == square.x && calculatedSquare.y == square.y {
-					found = true
-					break
-				}
-			}
+func TestParseClaimsAndSquares(t *testing.T) {
+	claimStrings := []string{"#1 @ 1,1: 2x2", "#2 @ 1,1: 2x1"}
+	claims := []claim{claim{1, 1, 1, 3, 3, 2, 2}, claim{2, 1, 1, 3, 2, 2, 1}}
+	expected := make(map[claim][]square)
+	expected[claims[0]] = []square{{1, 1}, {1, 2}, {2, 1}, {2, 2}}
+	expected[claims[1]] = []square{{1, 1}, {2, 1}}
 
-			if !found {
-				t.Errorf("CalculateSquares expected square %v but was not found", square)
-			}
+	parsed := parseClaimsAndSquares(claimStrings)
+
+	for _, c := range claims {
+		expectedSquares := expected[c]
+		parsedSquares := parsed[c]
+		if !reflect.DeepEqual(expectedSquares, parsedSquares) {
+			t.Errorf("ParseClaimsAndSquares did not return the correct result for claim %v. Got %v but expected %v", c, parsedSquares, expectedSquares)
 		}
+	}
+}
+
+func TestCalculateOverlappingSquares(t *testing.T) {
+	claims := []string{"#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"}
+	expected := map[square]struct{}{square{3, 3}: struct{}{}, square{3, 4}: struct{}{}, square{4, 3}: struct{}{}, square{4, 4}: struct{}{}}
+	overlapping := calculateOverlappingSquares(claims)
+
+	if !reflect.DeepEqual(expected, overlapping) {
+		t.Errorf("CalculateOverlappingSquares did not calculate the correct squares. Got %v but got %v", overlapping, expected)
 	}
 }
 
@@ -83,5 +99,14 @@ func TestFindOverlappingSquares(t *testing.T) {
 	overlapping := FindOverlappingSquares(claims)
 	if overlapping != expected {
 		t.Errorf("FindOverlappingSquares should find %d but got %d", expected, overlapping)
+	}
+}
+
+func TestFindUniqueClaim(t *testing.T) {
+	claims := []string{"#1 @ 1,3: 4x4", "#2 @ 3,1: 4x4", "#3 @ 5,5: 2x2"}
+	expected := 3
+	unique := FindUniqueClaim(claims)
+	if unique != expected {
+		t.Errorf("FindUniqueClaim should find %d but got %d", expected, unique)
 	}
 }

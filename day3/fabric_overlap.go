@@ -53,15 +53,23 @@ func (c claim) calculateSquares() []square {
 	return squares
 }
 
-// FindOverlappingSquares takes a slice of claim strings, parses them and finds
-// how many of squares they overlap on.
-func FindOverlappingSquares(input []string) int {
-	foundSquares := make(map[square]struct{})
-	overlappingSquares := make(map[square]struct{})
-
-	for _, s := range input {
+func parseClaimsAndSquares(claimStrings []string) map[claim][]square {
+	claims := make(map[claim][]square)
+	for _, s := range claimStrings {
 		claim := parseClaim(s)
 		squares := claim.calculateSquares()
+		claims[claim] = squares
+	}
+
+	return claims
+}
+
+func calculateOverlappingSquares(input []string) map[square]struct{} {
+	foundSquares := make(map[square]struct{})
+	overlappingSquares := make(map[square]struct{})
+	claims := parseClaimsAndSquares(input)
+
+	for _, squares := range claims {
 		for _, square := range squares {
 			_, ok := foundSquares[square]
 			if ok {
@@ -72,5 +80,35 @@ func FindOverlappingSquares(input []string) int {
 		}
 	}
 
-	return len(overlappingSquares)
+	return overlappingSquares
+}
+
+// FindOverlappingSquares takes a slice of claim strings, parses them and finds
+// how many of squares they overlap on.
+func FindOverlappingSquares(input []string) int {
+	return len(calculateOverlappingSquares(input))
+}
+
+// FindUniqueClaim takes a slice of claim strings, parses them and finds which
+// of them does not overlap with any other claim, returning that claim's ID.
+func FindUniqueClaim(input []string) int {
+	overlappingSquares := calculateOverlappingSquares(input)
+	claims := parseClaimsAndSquares(input)
+
+	for claim, squares := range claims {
+		found := false
+		for _, square := range squares {
+			_, ok := overlappingSquares[square]
+			if ok {
+				found = true
+				break
+			}
+		}
+
+		if !found {
+			return claim.number
+		}
+	}
+
+	panic("No claim found with no overlapping squares.")
 }

@@ -43,6 +43,7 @@ func calculateDay3() {
 	input := ParseStrings(string(rawInput))
 
 	fmt.Printf("Day 3 part 1: %d\n", day3.FindOverlappingSquares(input))
+	fmt.Printf("Day 3 part 2: %d\n", day3.FindUniqueClaim(input))
 }
 
 // ParseStrings takes a newline separated single string and creates a slice
