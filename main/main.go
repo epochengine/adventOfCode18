@@ -4,13 +4,14 @@ import (
 	"epochengine/adventofcode/day1"
 	"epochengine/adventofcode/day2"
 	"epochengine/adventofcode/day3"
+	"epochengine/adventofcode/day4"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	calculateDay3()
+	calculateDay4()
 }
 
 func calculateDay1() {
@@ -44,6 +45,17 @@ func calculateDay3() {
 
 	fmt.Printf("Day 3 part 1: %d\n", day3.FindOverlappingSquares(input))
 	fmt.Printf("Day 3 part 2: %d\n", day3.FindUniqueClaim(input))
+}
+
+func calculateDay4() {
+	rawInput, err := Asset("resources/guard_sleep_input.txt")
+	if err != nil {
+		panic(err)
+	}
+	input := ParseStrings(string(rawInput))
+
+	id, minute := day4.FindMostLikelySleepingGuardMinute(input)
+	fmt.Printf("Day 4 part 1: %d * %d = %d\n", id, minute, id*minute)
 }
 
 // ParseStrings takes a newline separated single string and creates a slice

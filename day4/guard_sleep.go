@@ -17,22 +17,6 @@ type date struct {
 	minute int
 }
 
-// func (d date) Year() int {
-// 	return d.year
-// }
-
-// func (d date) Month() int {
-// 	return d.month
-// }
-
-// func (d date) Day() int {
-// 	return d.day
-// }
-
-// func (d date) Minute() int {
-// 	return d.minute
-// }
-
 type startShift struct {
 	entryDate date
 	guardID   int
@@ -117,4 +101,75 @@ func parseGuardSchedule(input []string) []scheduleEntry {
 	})
 
 	return schedule
+}
+
+func calculateSleepTimes(entries []scheduleEntry) map[int]map[int]int {
+	sleepTimes := make(map[int]map[int]int)
+	var guardID int
+	var startSleep int
+	for _, entry := range entries {
+		switch e := entry.(type) {
+		case startShift:
+			guardID = e.guardID
+		case fallAsleep:
+			startSleep = e.entryDate.minute
+		case wakeUp:
+			sleeps, ok := sleepTimes[guardID]
+			if !ok {
+				sleeps = make(map[int]int)
+			}
+
+			for i := startSleep; i < e.entryDate.minute; i++ {
+				count, ok := sleeps[i]
+				if !ok {
+					sleeps[i] = 1
+				} else {
+					sleeps[i] = count + 1
+				}
+			}
+			sleepTimes[guardID] = sleeps
+		default:
+			panic("Unknown entry type!")
+		}
+	}
+
+	return sleepTimes
+}
+
+func calculateTotalSleepingMinutes(sleepTimes map[int]int) int {
+	total := 0
+	for _, minutes := range sleepTimes {
+		total += minutes
+	}
+	return total
+}
+
+// FindMostLikelySleepingGuardMinute parses a list of string guard sleep
+// schedule entries and finds the guard that sleeps the most, and the
+// minute that guard is most likely (by frequency) to be asleep.
+func FindMostLikelySleepingGuardMinute(input []string) (int, int) {
+	scheduleEntries := parseGuardSchedule(input)
+	sleepTimes := calculateSleepTimes(scheduleEntries)
+	maxMinutes := 0
+	guardID := -1
+
+	for id, sleeps := range sleepTimes {
+		total := calculateTotalSleepingMinutes(sleeps)
+		if total > maxMinutes {
+			guardID = id
+			maxMinutes = total
+		}
+	}
+
+	sleeps := sleepTimes[guardID]
+	var minute int
+	var maxFrequency int
+	for min, freq := range sleeps {
+		if freq > maxFrequency {
+			minute = min
+			maxFrequency = freq
+		}
+	}
+
+	return guardID, minute
 }
