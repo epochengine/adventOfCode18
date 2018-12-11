@@ -56,6 +56,8 @@ func calculateDay4() {
 
 	id, minute := day4.FindMostLikelySleepingGuardMinute(input)
 	fmt.Printf("Day 4 part 1: %d * %d = %d\n", id, minute, id*minute)
+	id, minute = day4.FindMostFrequentlyAsleepMinuteGuard(input)
+	fmt.Printf("Day 4 part 2: %d * %d = %d\n", id, minute, id*minute)
 }
 
 // ParseStrings takes a newline separated single string and creates a slice

@@ -173,3 +173,26 @@ func FindMostLikelySleepingGuardMinute(input []string) (int, int) {
 
 	return guardID, minute
 }
+
+// FindMostFrequentlyAsleepMinuteGuard parses a list of string guard sleep
+// schedule entries and finds the guard who is the asleep most often in any
+// minute.
+func FindMostFrequentlyAsleepMinuteGuard(input []string) (int, int) {
+	scheduleEntries := parseGuardSchedule(input)
+	sleepTimes := calculateSleepTimes(scheduleEntries)
+	maxFrequency := 0
+	minute := -1
+	guardID := -1
+
+	for id, sleeps := range sleepTimes {
+		for min, freq := range sleeps {
+			if freq > maxFrequency {
+				guardID = id
+				minute = min
+				maxFrequency = freq
+			}
+		}
+	}
+
+	return guardID, minute
+}
