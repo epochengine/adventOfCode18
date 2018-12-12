@@ -5,13 +5,14 @@ import (
 	"epochengine/adventofcode/day2"
 	"epochengine/adventofcode/day3"
 	"epochengine/adventofcode/day4"
+	"epochengine/adventofcode/day5"
 	"fmt"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	calculateDay4()
+	calculateDay5()
 }
 
 func calculateDay1() {
@@ -58,6 +59,20 @@ func calculateDay4() {
 	fmt.Printf("Day 4 part 1: %d * %d = %d\n", id, minute, id*minute)
 	id, minute = day4.FindMostFrequentlyAsleepMinuteGuard(input)
 	fmt.Printf("Day 4 part 2: %d * %d = %d\n", id, minute, id*minute)
+}
+
+func calculateDay5() {
+	rawInput, err := Asset("resources/polymer_input.txt")
+	if err != nil {
+		panic(err)
+	}
+	input := string(rawInput)
+	input = strings.TrimSuffix(input, "\n")
+
+	reacted := day5.RemoveReactingPairs(input)
+	fmt.Printf("Day 5 part 1: %d\n", len(reacted))
+	shortestReacted := day5.FindShortestPolymerByRemovingUnit(input)
+	fmt.Printf("Day 5 part 2: %d\n", len(shortestReacted))
 }
 
 // ParseStrings takes a newline separated single string and creates a slice
